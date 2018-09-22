@@ -1235,6 +1235,20 @@ namespace VRCSDK2
                         parameters[idx] = false;
                     parameters[idx] = EditorGUILayout.Toggle(paramInfo[idx].Name, (bool)parameters[idx]);
                 }
+                else if (paramType.IsEnum)
+                {
+                    // make an array of strings of the enum values
+                    var values = Enum.GetValues(paramType);
+                    string[] itemStrings = new string[values.Length];
+                    int i=0;
+                    foreach (var item in Enum.GetValues(paramType))
+                    {
+                        itemStrings[i++] = item.ToString();
+                    } 
+                    if (parameters[idx] == null || parameters[idx].GetType() != paramType)
+                        parameters[idx] = Enum.Parse(paramType, itemStrings[0]);
+                    parameters[idx] = Enum.Parse( paramType, itemStrings[ EditorGUILayout.Popup(paramInfo[idx].Name, (int)parameters[idx], itemStrings) ] );
+                }
                 else if (paramType == typeof(double))
                 {
                     if (parameters[idx] == null || parameters[idx].GetType() != paramType)

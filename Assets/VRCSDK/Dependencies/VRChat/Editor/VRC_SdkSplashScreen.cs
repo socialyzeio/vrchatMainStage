@@ -82,6 +82,10 @@ namespace VRCSDK2
             {
                 Application.OpenURL("https://vrchat.groovehq.com/knowledge_base/categories/technical-issues-vrchat-sdk");
             }
+            if(GUILayout.Button("Examples"))
+            {
+                Application.OpenURL("https://docs.vrchat.com/docs/vrchat-kits");
+            }
             GUI.backgroundColor = Color.white;
             GUILayout.EndHorizontal();
             GUILayout.Space(4);
@@ -89,6 +93,16 @@ namespace VRCSDK2
             changeLogScroll = GUILayout.BeginScrollView(changeLogScroll);
             GUILayout.Label(
     @"Changelog:
+2018.2.2
+Changes
+-New triggers added to 'Example - Triggers - 2.unity' included 
+    with the SDK
+Fixes
+-VRCWorld prefab had the UpdateTimeInMS set to 10ms even 
+    though the slider value in inspector is capped to 33ms 
+    as minimum value. The default is now set to 33ms.
+
+2018.2.1
 - Added Bufferone support for actions where it was missing
    --SetLayer
    --SetWebpanelVolume

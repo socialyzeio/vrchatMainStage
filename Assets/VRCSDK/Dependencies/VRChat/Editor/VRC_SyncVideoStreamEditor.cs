@@ -4,30 +4,33 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 
-[CustomPropertyDrawer(typeof(VRCSDK2.VRC_SyncVideoPlayer.VideoEntry))]
-public class CustomVideoEntryDrawer : PropertyDrawer
-{    
+[CustomPropertyDrawer(typeof(VRCSDK2.VRC_SyncVideoStream.VideoEntry))]
+public class CustomVideoStreamEntryDrawer : PropertyDrawer
+{
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         SerializedProperty source = property.FindPropertyRelative("Source");
-        SerializedProperty ratio = property.FindPropertyRelative("AspectRatio");
         SerializedProperty speed = property.FindPropertyRelative("PlaybackSpeed");
         SerializedProperty clip = property.FindPropertyRelative("VideoClip");
         SerializedProperty url = property.FindPropertyRelative("URL");
+        SerializedProperty live = property.FindPropertyRelative("SyncType");
+        SerializedProperty sync = property.FindPropertyRelative("SyncMinutes");
 
         return EditorGUI.GetPropertyHeight(source, new GUIContent("Source"), true) + EditorGUIUtility.standardVerticalSpacing
-            + EditorGUI.GetPropertyHeight(ratio, new GUIContent("Aspect Ratio"), true) + EditorGUIUtility.standardVerticalSpacing
             + EditorGUI.GetPropertyHeight(speed, new GUIContent("Playback Speed"), true) + EditorGUIUtility.standardVerticalSpacing
-            + Mathf.Max(EditorGUI.GetPropertyHeight(clip, new GUIContent("VideoClip"), true), EditorGUI.GetPropertyHeight(url, new GUIContent("URL"), true)) + EditorGUIUtility.standardVerticalSpacing;
+            + Mathf.Max(EditorGUI.GetPropertyHeight(clip, new GUIContent("VideoClip"), true), EditorGUI.GetPropertyHeight(url, new GUIContent("URL"), true)) + EditorGUIUtility.standardVerticalSpacing
+            + EditorGUI.GetPropertyHeight(speed, new GUIContent("SyncType"), true) + EditorGUIUtility.standardVerticalSpacing
+            + EditorGUI.GetPropertyHeight(speed, new GUIContent("SyncMinutes"), true) + EditorGUIUtility.standardVerticalSpacing;
     }
 
     public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
     {
         SerializedProperty source = property.FindPropertyRelative("Source");
-        SerializedProperty ratio = property.FindPropertyRelative("AspectRatio");
         SerializedProperty speed = property.FindPropertyRelative("PlaybackSpeed");
         SerializedProperty clip = property.FindPropertyRelative("VideoClip");
         SerializedProperty url = property.FindPropertyRelative("URL");
+        SerializedProperty live = property.FindPropertyRelative("SyncType");
+        SerializedProperty sync = property.FindPropertyRelative("SyncMinutes");
 
         EditorGUI.BeginProperty(rect, label, property);
         float x = rect.x;
@@ -50,22 +53,28 @@ public class CustomVideoEntryDrawer : PropertyDrawer
             y += h;
         }
 
-        h = EditorGUI.GetPropertyHeight(ratio, new GUIContent("AspectRatio"), true) + EditorGUIUtility.standardVerticalSpacing;
-        EditorGUI.PropertyField(new Rect(x, y, w, h), ratio);
-        y += h;
-
-        h = EditorGUI.GetPropertyHeight(ratio, new GUIContent("Playback Speed"), true) + EditorGUIUtility.standardVerticalSpacing;
+        h = EditorGUI.GetPropertyHeight(speed, new GUIContent("Playback Speed"), true) + EditorGUIUtility.standardVerticalSpacing;
         EditorGUI.PropertyField(new Rect(x, y, w, h), speed);
         if (speed.floatValue == 0f)
             speed.floatValue = 1f;
+        y += h;
+
+        h = EditorGUI.GetPropertyHeight(live, new GUIContent("SyncType"), true) + EditorGUIUtility.standardVerticalSpacing;
+        EditorGUI.PropertyField(new Rect(x, y, w, h), live);
+        y += h;
+
+        h = EditorGUI.GetPropertyHeight(sync, new GUIContent("SyncMinutes"), true) + EditorGUIUtility.standardVerticalSpacing;
+        EditorGUI.PropertyField(new Rect(x, y, w, h), sync);
+        if (sync.floatValue < 1f)
+            sync.floatValue = 0;
         y += h;
 
         EditorGUI.EndProperty();
     }
 }
 
-[CustomEditor(typeof(VRCSDK2.VRC_SyncVideoPlayer))]
-public class SyncVideoPlayerEditor : Editor
+[CustomEditor(typeof(VRCSDK2.VRC_SyncVideoStream))]
+public class SyncVideoStreamEditor : Editor
 {
     ReorderableList sourceList;
 
@@ -75,6 +84,10 @@ public class SyncVideoPlayerEditor : Editor
         EditorGUILayout.PropertyField(searchRoot);
         SerializedProperty maxQual = serializedObject.FindProperty("MaxStreamQuality");
         EditorGUILayout.PropertyField(maxQual);
+        SerializedProperty texFmt = serializedObject.FindProperty("videoTextureFormat");
+        EditorGUILayout.PropertyField(texFmt);
+        SerializedProperty autoStart = serializedObject.FindProperty("AutoStart");
+        EditorGUILayout.PropertyField(autoStart);
 
         EditorGUILayout.Space();
 
