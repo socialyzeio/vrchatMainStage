@@ -371,7 +371,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 98173f743947d38499a6573aafa81f02, type: 2}
       propertyPath: blueprintId
-      value: avtr_af6da170-1021-4fa1-97d2-bc38b95c1e41
+      value: avtr_81943e86-45f8-41b2-9ff6-529b4a11c701
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 98173f743947d38499a6573aafa81f02, type: 2}
